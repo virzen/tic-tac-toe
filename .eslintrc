@@ -1,5 +1,4 @@
 {
-	# "parser": "babel-eslint",
     "rules": {
 		"strict": 0,
         "indent": [
@@ -10,14 +9,11 @@
             1,
             "single"
         ],
-        "linebreak-style": [
-            2,
-            "windows"
-        ],
         "semi": [
             2,
             "always"
         ],
+		"linebreak-style": 2,
 		"no-undef": 1,
 		"no-unused-vars": 0,
 		"comma-dangle": 0,
