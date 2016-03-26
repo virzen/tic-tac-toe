@@ -45,18 +45,21 @@ new Vue({
 	},
 
 	computed: {
-		symbolsNotPicked: function () {
-			return this.players.map(x => x.symbolId).indexOf(-1) !== -1;
+		symbolsPicked: function () {
+			return this.players.map(x => x.symbolId).indexOf(-1) === -1;
 		}
 	},
 
 	events: {
 		symbolPicked: function (symbol) {
 			const playerTypeId = this.types.findIndex(x => x === 'player');
+			const botTypeId = this.types.findIndex(x => x === 'bot');
 			const player = this.players.find(x => x.typeId === playerTypeId);
-			const bot = this.players.find(x => x.typeId !== playerTypeId);
+			const bot = this.players.find(x => x.typeId === botTypeId);
 
+			// set symbolId for player
 			player.symbolId = this.symbols.indexOf(symbol);
+			// set symbolId of a different symbol than player's for bot
 			bot.symbolId = this.symbols.findIndex(x => x !== symbol);
 		}
 	}

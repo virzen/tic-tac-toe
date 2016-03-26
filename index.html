@@ -13,8 +13,8 @@
 	</header>
 
 	<div id="app">
-		<side-picker v-if="symbolsNotPicked" :symbols="symbols"></side-picker>
-		<game-board></game-board>
+		<game-board v-if="symbolsPicked"></game-board>
+		<side-picker v-else :symbols="symbols"></side-picker>
 	</div>
 
 	<footer class="primary-footer">
