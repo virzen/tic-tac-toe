@@ -13,19 +13,39 @@
 	</header>
 
 	<div id="app">
-		{{ hello }}
+		<side-picker v-if="symbolsNotPicked" :symbols="symbols"></side-picker>
+		<game-board></game-board>
 	</div>
 
 	<footer class="primary-footer">
 		Wiktor Czajkowski &copy; 2016. All rights reserved.
 	</footer>
 
+	<!-- Templates -->
+	<template id="game-board-template">
+		<div class="col" v-for="(colIndex, col) in grid">
+			<button type="button" class="cell" v-for="(rowIndex, cell) in col" track-by="$index">
+				{{ cell }}
+			</button>
+		</div>
+	</template>
+
+	<template id="side-picker-template">
+		Pick a side:
+		<button type="button"
+			v-for="symbol in symbols"
+			@click="pickSymbol(symbol)"
+		>
+			{{ symbol }}
+		</button>
+	</template>
+
 	<!-- CSS -->
 	<link rel="stylesheet" href="css/main.css">
 
 	<!-- JS -->
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script> -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.19/vue.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.19/vue.js"></script>
 	<script src="js/main.js"></script>
 </body>
 </html>
