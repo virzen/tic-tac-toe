@@ -12,19 +12,31 @@
 		<h1>Tic Tac Toe</h1>
 	</header>
 
+
 	<div id="app">
-		<game-board v-if="symbolsPicked"></game-board>
+		<game-board v-if="symbolsPicked"
+			:player="player"
+			:bot="bot"
+			:symbols="symbols"
+		></game-board>
 		<side-picker v-else :symbols="symbols"></side-picker>
 	</div>
+
 
 	<footer class="primary-footer">
 		Wiktor Czajkowski &copy; 2016. All rights reserved.
 	</footer>
 
+
 	<!-- Templates -->
 	<template id="game-board-template">
-		<div class="col" v-for="(colIndex, col) in grid">
-			<button type="button" class="cell" v-for="(rowIndex, cell) in col" track-by="$index">
+		<div class="col" v-for="(rowIndex, col) in grid">
+			<button type="button"
+				class="cell"
+				v-for="(colIndex, cell) in col"
+				track-by="$index"
+				@click="makeMove(player, rowIndex, colIndex)"
+			>
 				{{ cell }}
 			</button>
 		</div>
@@ -39,6 +51,7 @@
 			{{ symbol }}
 		</button>
 	</template>
+
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="css/main.css">
