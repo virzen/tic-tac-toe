@@ -14,7 +14,7 @@
             "always"
         ],
 		"linebreak-style": 2,
-		"no-undef": 1,
+		"no-undef": 2,
 		"no-unused-vars": 0,
 		"comma-dangle": 0,
 		"no-console": 0
