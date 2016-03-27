@@ -35,7 +35,7 @@
 				class="cell"
 				v-for="(colIndex, cell) in col"
 				track-by="$index"
-				@click="makeMove(player, rowIndex, colIndex)"
+				@click="playerMove(rowIndex, colIndex)"
 			>
 				{{ cell }}
 			</button>
