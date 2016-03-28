@@ -14,6 +14,11 @@
 
 
 	<div id="app">
+		<score-board v-if="symbolsPicked"
+			:player="player"
+			:bot="bot"
+			:symbols="symbols"
+		></score-board>
 		<game-board v-if="symbolsPicked"
 			:player="player"
 			:bot="bot"
@@ -50,6 +55,15 @@
 		>
 			{{ symbol }}
 		</button>
+	</template>
+
+	<template id="score-board-template">
+		Player ({{ getSymbol(player.symbolId) }}): {{ player.score }}
+		|
+		Bot ({{ getSymbol(bot.symbolId) }}): {{ bot.score }}
+		<div v-show="message" class="message">
+			{{ message }}
+		</div>
 	</template>
 
 

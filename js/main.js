@@ -14,6 +14,39 @@ Vue.component('side-picker', {
 	}
 });
 
+Vue.component('score-board', {
+	template: '#score-board-template',
+
+	props: ['player', 'bot', 'symbols'],
+
+	data: function () {
+		return {
+			message: ''
+		};
+	},
+
+	methods: {
+		getSymbol: function (symbolId) {
+			return this.symbols[symbolId];
+		},
+		clearMessage: function () {
+			this.message = '';
+		}
+	},
+
+	events: {
+		gameWonBy: function (type) {
+			const typeCap = type.charAt(0).toUpperCase() + type.slice(1);
+			this.message = `${typeCap} wins!`;
+			setTimeout(this.clearMessage, 1000);
+		},
+		tie: function () {
+			this.message = `Tie!`;
+			setTimeout(this.clearMessage, 1000);
+		}
+	}
+});
+
 Vue.component('game-board', {
 	template: '#game-board-template',
 
@@ -81,7 +114,6 @@ Vue.component('game-board', {
 				return null;
 			}
 		},
-		// TODO: implement real bot
 		botMove: function () {
 			const grid = this.grid;
 			let coords = [];
@@ -179,12 +211,14 @@ new Vue({
 			{
 				id: 0,
 				typeId: 0,
-				symbolId: -1
+				symbolId: -1,
+				score: 0
 			},
 			{
 				id: 1,
 				typeId: 1,
-				symbolId: -1
+				symbolId: -1,
+				score: 0
 			}
 		],
 	},
@@ -213,6 +247,15 @@ new Vue({
 			this.player.symbolId = this.symbols.indexOf(symbol);
 			// set symbolId of a different symbol than player's for bot
 			this.bot.symbolId = this.symbols.findIndex(x => x !== symbol);
+		},
+		gameWonBy: function (player) {
+			const type = this.types[player.typeId];
+
+			player.score++;
+			this.$broadcast('gameWonBy', type);
+		},
+		tie: function () {
+			this.$broadcast('tie');
 		}
 	}
 });
