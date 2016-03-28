@@ -1,10 +1,6 @@
 /* global Vue */
 
-const defaultGrid = [
-	['_', '_', '_'],
-	['_', '_', '_'],
-	['_', '_', '_']
-];
+
 
 Vue.component('side-picker', {
 	template: '#side-picker-template',
@@ -24,33 +20,58 @@ Vue.component('game-board', {
 	props: ['player', 'bot', 'symbols'],
 
 	data: function () {
+		const defaultGrid = Object.freeze([
+			['_', '_', '_'],
+			['_', '_', '_'],
+			['_', '_', '_']
+		]);
 		return {
-			grid: [...defaultGrid],
+			defaultGrid: defaultGrid,
+			grid: defaultGrid.map(x => Array.from(x)),
 			prevFirstPlayerId: -1
 		};
 	},
 
 	methods: {
-		playerWon: function (player) {
-			const symbol = this.getSymbol(player.symbolId);
-			const rows = this.grid.map(row => row.filter(x => x === symbol));
-			const threeInRow = rows.reduce((a, b) => a || b.length === 3, false);
-
-			if (threeInRow) {
-				return true;
-			}
-			else {
-
-			}
-		},
 		getSymbol: function (symbolId) {
 			return this.symbols[symbolId];
 		},
+		isEmpty: function (cell) {
+			return cell === '_';
+		},
+		playerWon: function (player) {
+			const symbol = this.getSymbol(player.symbolId);
+			const grid = this.grid;
+
+			// rows
+			for (let i = 0; i < 3; i++) {
+				if (grid[i][0] === symbol && grid[i][1] === symbol && grid[i][2] === symbol) {
+					return true;
+				}
+			}
+
+			// cols
+			for (let i = 0; i < 3; i++) {
+				if (grid[0][i] === symbol && grid[1][i] === symbol && grid[2][i] === symbol) {
+					return true;
+				}
+			}
+
+			// diagonals
+			// top-left to bottom-right
+			if (grid[0][0] === symbol && grid[1][1] === symbol && grid[2][2] === symbol) {
+				return true;
+			}
+			// top-right to bottom-left
+			if (grid[0][2] === symbol && grid[1][1] === symbol && grid[2][0] === symbol) {
+				return true;
+			}
+		},
 		resetGrid: function () {
-			this.grid = [...defaultGrid];
+			this.grid = this.defaultGrid.map(x => Array.from(x));
 		},
 		makeMove: function (player, rowIndex, colIndex) {
-			if (this.grid[rowIndex][colIndex] === '_') {
+			if (this.isEmpty(this.grid[rowIndex][colIndex])) {
 				const symbol = this.getSymbol(player.symbolId);
 				this.grid[rowIndex].$set(colIndex, symbol);
 
@@ -62,12 +83,51 @@ Vue.component('game-board', {
 		},
 		// TODO: implement real bot
 		botMove: function () {
-			const colIndex = Math.floor(Math.random() * 3);
-			const rowIndex = Math.floor(Math.random() * 3);
+			const grid = this.grid;
+			let coords = [];
 
-			if (!this.makeMove(this.bot, rowIndex, colIndex)) {
-				this.botMove();
+			// middle
+			if (this.isEmpty(grid[1][1])) {
+				coords = [1, 1];
 			}
+			else {
+				// corners
+				if (this.isEmpty(grid[0][0])) {
+					coords = [0, 0];
+				}
+				else if (this.isEmpty(grid[0][2])) {
+					coords = [0, 2];
+				}
+				else if (this.isEmpty(grid[2][0])) {
+					coords = [2, 0];
+				}
+				else if (this.isEmpty(grid[2][2])) {
+					coords = [2, 2];
+				}
+
+				// anything that's left
+				else {
+					if (this.isEmpty(grid[0][1])) {
+						coords = [0, 1];
+					}
+					else if (this.isEmpty(grid[1][0])) {
+						coords = [1, 0];
+					}
+					else if (this.isEmpty(grid[1][2])) {
+						coords = [1, 2];
+					}
+					else if (this.isEmpty(grid[2][1])) {
+						coords = [2, 1];
+					}
+
+					// no move possible
+					else {
+						return false;
+					}
+				}
+			}
+
+			return this.makeMove(this.bot, ...coords);
 		},
 		startGame: function () {
 			let currId = -1;
@@ -89,15 +149,19 @@ Vue.component('game-board', {
 		playerMove: function (rowIndex, colIndex) {
 			if (this.makeMove(this.player, rowIndex, colIndex)) {
 				if (this.playerWon(this.player)) {
-					// TODO: display results
-					console.log('Player won.');
-					this.startGame();
+					this.$dispatch('gameWonBy', this.player);
+					setTimeout(this.startGame, 1000);
 				}
 				else {
-					this.botMove();
-					if (this.playerWon(this.bot)) {
-						// TODO: display results
-						this.startGame();
+					if (this.botMove()) {
+						if (this.playerWon(this.bot)) {
+							this.$dispatch('gameWonBy', this.bot);
+							setTimeout(this.startGame, 1000);
+						}
+					}
+					else {
+						this.$dispatch('tie');
+						setTimeout(this.startGame, 1000);
 					}
 				}
 			}
