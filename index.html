@@ -14,17 +14,21 @@
 
 
 	<div id="app">
-		<score-board v-if="symbolsPicked"
-			:player="player"
-			:bot="bot"
-			:symbols="symbols"
-		></score-board>
-		<game-board v-if="symbolsPicked"
-			:player="player"
-			:bot="bot"
-			:symbols="symbols"
-		></game-board>
-		<side-picker v-else :symbols="symbols"></side-picker>
+		<section class="score-board">
+			<score-board v-if="symbolsPicked"
+				:player="player"
+				:bot="bot"
+				:symbols="symbols"
+			></score-board>
+		</section>
+		<section class="game-board">
+			<game-board v-if="symbolsPicked"
+				:player="player"
+				:bot="bot"
+				:symbols="symbols"
+			></game-board>
+		</section>
+		<side-picker v-if="!symbolsPicked" :symbols="symbols"></side-picker>
 	</div>
 
 
@@ -37,7 +41,7 @@
 	<template id="game-board-template">
 		<div class="col" v-for="(rowIndex, col) in grid">
 			<button type="button"
-				class="cell"
+				class="game-board__cell"
 				v-for="(colIndex, cell) in col"
 				track-by="$index"
 				@click="playerMove(rowIndex, colIndex)"

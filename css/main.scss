@@ -1,1 +1,33 @@
 // compileExpanded
+$line-height: 1.618;
+$baseline: 1rem * $line-height;
+
+body {
+	line-height: $line-height;
+	font-family: Arial, sans-serif;
+	text-align: center;
+}
+
+.primary-header {
+
+}
+
+.score-board {
+	margin: $baseline 0;
+}
+
+.game-board {
+	font-size: 2em;
+	margin: $baseline 0;
+
+	&__cell {
+		font-size: inherit;
+		width: $baseline * 2;
+		height: $baseline * 2;
+	}
+}
+
+
+.primary-footer {
+	margin: $baseline 0;
+}

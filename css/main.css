@@ -1,2 +1,26 @@
+body {
+	line-height: 1.618;
+	font-family: Arial, sans-serif;
+	text-align: center;
+}
+
+.score-board {
+	margin: 1.618rem 0;
+}
+
+.game-board {
+	font-size: 2em;
+	margin: 1.618rem 0;
+}
+
+.game-board__cell {
+	font-size: inherit;
+	width: 3.236rem;
+	height: 3.236rem;
+}
+
+.primary-footer {
+	margin: 1.618rem 0;
+}
 
 /*# sourceMappingURL=main.css.map */
