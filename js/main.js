@@ -115,6 +115,7 @@ Vue.component('game-board', {
 			}
 		},
 		botMove: function () {
+			console.log('bot move');
 			const grid = this.grid;
 			let coords = [];
 
@@ -166,17 +167,18 @@ Vue.component('game-board', {
 			const prevId = this.prevFirstPlayerId;
 
 			if (prevId === -1) {
-				currId === this.player.id;
+				currId = this.player.id;
 			}
 			else {
 				// change 0 to 1 or 1 to 0
 				currId = (prevId) ? 0 : 1;
-				this.botMove();
 			}
 
 			this.prevFirstPlayerId = currId;
-			// TODO: increment score
 			this.resetGrid();
+			if (currId === this.bot.id) {
+				this.botMove();
+			}
 		},
 		playerMove: function (rowIndex, colIndex) {
 			if (this.makeMove(this.player, rowIndex, colIndex)) {
