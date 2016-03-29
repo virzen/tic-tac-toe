@@ -115,7 +115,6 @@ Vue.component('game-board', {
 			}
 		},
 		botMove: function () {
-			console.log('bot move');
 			const grid = this.grid;
 			let coords = [];
 
