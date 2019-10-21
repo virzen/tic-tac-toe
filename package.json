@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/Virzen/tic-tac-toe#readme",
   "devDependencies": {
-    "eslint": "^2.4.0"
+    "eslint": "^6.5.1"
   }
 }
